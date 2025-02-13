@@ -10,24 +10,36 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-func HandleFollow(apEvent map[string]any) {
+func HandleFollowEvent(apEvent map[string]any, outbound bool) {
 	var body models.ActivityPubFollowEvent
 	mapstructure.Decode(apEvent, &body)
 
 	var description string
-	if len(body.User.Description) >= 50 {
-		description = body.User.Description[:50]
+	if len(body.User.Description) >= 250 {
+		description = body.User.Description[:250]
 	} else {
 		description = body.User.Description
 	}
 
-	text := fmt.Sprintf(`Now Following: %s (%s@%s)
-	%s...`,
-		body.User.Name,
-		body.User.UserName,
-		body.User.Host,
-		description,
-	)
+	var text string
+
+	if !outbound {
+		text = fmt.Sprintf(`New Follower: %s (%s@%s)
+%s...`,
+			body.User.Name,
+			body.User.UserName,
+			body.User.Host,
+			description,
+		)
+	} else {
+		text = fmt.Sprintf(`Now Following: %s (%s@%s)
+%s...`,
+			body.User.Name,
+			body.User.UserName,
+			body.User.Host,
+			description,
+		)
+	}
 
 	req, _ := http.NewRequest("POST", fmt.Sprintf("%s/%s", os.Getenv("NTFY_URL"), os.Getenv("NTFY_CHANNEL")), bytes.NewBufferString(text))
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", os.Getenv("NTFY_TOKEN")))

@@ -37,20 +37,19 @@ func fediEvent(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, map[string]string{})
 	}
 
-	fmt.Printf("TYPE %v\n", event.Type)
-	fmt.Printf("BODY %v\n", event.Body)
-
 	switch event.Type {
 	case "followed":
-		handlers.HandleFollowed(event.Body)
+		handlers.HandleFollowEvent(event.Body, false)
 	case "follow":
-		handlers.HandleFollow(event.Body)
+		handlers.HandleFollowEvent(event.Body, true)
 	case "note":
-		handlers.HandleNotePosted(event.Body)
+		handlers.HandleNotePosted(event.Body, handlers.AP_POST)
 	case "reply":
-		handlers.HandleNoteReplied(event.Body)
+		handlers.HandleNotePosted(event.Body, handlers.AP_REPLY)
 	case "renote":
-		handlers.HandleNoteBoosted(event.Body)
+		handlers.HandleNotePosted(event.Body, handlers.AP_BOOST)
+	case "mention":
+		handlers.HandleNotePosted(event.Body, handlers.AP_MENTION)
 	}
 
 	c.JSON(http.StatusOK, map[string]string{})
@@ -62,5 +61,5 @@ func main() {
 	router.GET("/health", health)
 	router.POST("/fedi-event", fediEvent)
 
-	router.Run("0.0.0.0:1337")
+	router.Run(fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT")))
 }
