@@ -10,7 +10,7 @@ build () {
 		EXT=".exe"
 	fi
 
-	go build -ldflags "-w" -o build/misskey-ntfy-bridge-v$VERSION-$GOOS-$GOARCH$EXT .
+	GCO_ENABLED=0 go build -tags netgo -a -ldflags "-w" -o build/misskey-ntfy-bridge-v$VERSION-$GOOS-$GOARCH$EXT .
 }
 
 #build darwin    	amd64
