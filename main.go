@@ -11,6 +11,11 @@ import (
 	"github.com/joho/godotenv"
 )
 
+const (
+	VERSION = "1.0.1-hotfix"
+	AUTHOR  = "Maya Boeckh <dev@atomicmaya.me>"
+)
+
 func init() {
 	err := godotenv.Load()
 	if err != nil {
@@ -19,7 +24,7 @@ func init() {
 }
 
 func health(c *gin.Context) {
-	c.JSON(http.StatusOK, map[string]string{"ping": "Alive"})
+	c.JSON(http.StatusOK, map[string]string{"ping": "Alive", "version": VERSION, "author": AUTHOR})
 }
 
 func fediEvent(c *gin.Context) {
