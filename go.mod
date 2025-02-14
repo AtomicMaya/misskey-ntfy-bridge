@@ -1,4 +1,4 @@
-module atomicmaya.me/misskey-ntfy-bridge/v2
+module dev.catgirl.global/misskey-ntfy-bridge/v2
 
 go 1.23.4
 

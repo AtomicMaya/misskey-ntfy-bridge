@@ -1,0 +1,17 @@
+services:
+  misskey-ntfy-bridge:
+    container_name: misskey-ntfy-bridge
+    hostname: misskey-ntfy-bridge
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports: 
+      - "1337:1337"
+    healthcheck:
+      test: ["CMD", "curl", "http://0.0.0.0:1337/health"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    env_file:
+      - .env
