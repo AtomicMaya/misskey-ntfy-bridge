@@ -1,0 +1,23 @@
+[Unit]
+Description=Bridge to ntfy for Misskey notifications
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=CHANGEME
+ExecStart=CHANGEME
+WorkingDirectory=CHANGEME
+
+Environment="SOURCE=systemd"
+Environment="HOST=CHANGEME"
+Environment="PORT=CHANGEME"
+Environment="ORIGIN_URL=CHANGEME"
+Environment="NTFY_URL=CHANGEME"
+Environment="NTFY_CHANNEL=CHANGEME"
+Environment="NTFY_TOKEN=CHANGEME"
+
+[Install]
+WantedBy=multi-user.target

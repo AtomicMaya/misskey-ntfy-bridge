@@ -52,11 +52,12 @@ func HandleNotePosted(apEvent map[string]any, eventType APNoteEventType) error {
 	// The reply may contain a content warning.
 	case AP_REPLY:
 		var reply string
+		reply = toot[:]
 
 		if body.Note.Reply.ContentWarning != "" {
-			reply = utils.Substring(body.Note.Reply.ContentWarning, 250)
+			toot = utils.Substring(body.Note.Reply.ContentWarning, 250)
 		} else {
-			reply = utils.Substring(body.Note.Reply.Text, 250)
+			toot = utils.Substring(body.Note.Reply.Text, 250)
 		}
 
 		text = fmt.Sprintf(`%s (%s@%s) replied:

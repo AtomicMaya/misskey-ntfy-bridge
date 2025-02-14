@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	VERSION = "1.0.2"
+	VERSION = "1.0.2-hotfix"
 	AUTHOR  = "maya <dev@catgirl.global>"
 	SOURCE  = "https://github.com/AtomicMaya/misskey-ntfy-bridge"
 	LICENSE = "EUPL-1.2"
@@ -25,7 +25,7 @@ var ORIGIN_DOMAIN string
 // Loads environment variables if supplied via a .env configuration file.
 func init() {
 	// If the SOURCE flag is provided (e.g. via the Dockerfile build) then don't throw an error.
-	if os.Getenv("SOURCE") == "container" {
+	if os.Getenv("SOURCE") == "container" || os.Getenv("SOURCE") == "systemd" {
 		return
 	}
 
@@ -85,7 +85,7 @@ func fediEvent(c *gin.Context) {
 	}
 
 	// Additional cross-instance malicious pollution protection
-	if event.Server != ORIGIN_DOMAIN {
+	if event.Server != os.Getenv("ORIGIN_URL") {
 		c.JSON(http.StatusUnauthorized, map[string]string{})
 		return
 	}
